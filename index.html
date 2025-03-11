@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>3D Spinning Polyhedron Prototype</title>
   <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <div id="controls">
@@ -21,7 +22,7 @@
     <button id="playPauseBtn">Pause</button>
 
     <!-- Polyhedron Sides Radio Buttons -->
-    <div class="radio-container">
+    <div class="radio-container" >
       <strong>Faces:</strong><br>
       <label><input type="radio" name="sides" value="4">4</label>
       <label><input type="radio" name="sides" value="6" checked>6</label>
@@ -29,6 +30,17 @@
       <label><input type="radio" name="sides" value="10">10</label>
       <label><input type="radio" name="sides" value="12">12</label>
       <label><input type="radio" name="sides" value="20">20</label>
+    </div>
+    <div class="select-container">
+      <strong>Faces:</strong><br>
+      <select id="sidesSelect">
+        <option value="4">4</option>
+        <option value="6" selected>6</option>
+        <option value="8">8</option>
+        <option value="10">10</option>
+        <option value="12">12</option>
+        <option value="20">20</option>
+      </select>
     </div>
 
     <!-- Sliders -->

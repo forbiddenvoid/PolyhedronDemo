@@ -17,6 +17,7 @@ let currentSides = 6;
 let isAnimating = true;
 let wasAnimating = false;
 let isMouseDown = false;
+let isTouchDrag = false;
 
 // Mouse tracking for manual rotation
 let lastMouseX = 0;
@@ -53,11 +54,16 @@ function init() {
   // Create initial polyhedron mesh
   createPolyhedronMesh(currentSides);
   setupEventListeners();
+  adjustMeshPositionForMobile();
 
   // Manual Rotation
   renderer.domElement.addEventListener("mousedown", onMouseDown, false);
   renderer.domElement.addEventListener("mousemove", onMouseMove, false);
   renderer.domElement.addEventListener("mouseup", onMouseUp, false);
+
+  renderer.domElement.addEventListener("touchstart", onTouchStart, false);
+  renderer.domElement.addEventListener("touchmove", onTouchMove, false);
+  renderer.domElement.addEventListener("touchend", onTouchEnd, false);
 
   window.addEventListener("resize", onWindowResize, false);
 }
@@ -134,6 +140,12 @@ function setupEventListeners() {
     });
   });
 
+  const sidesSelect = document.getElementById("sidesSelect");
+  sidesSelect.addEventListener("change", (e) => {
+    currentSides = parseInt(e.target.value);
+    createPolyhedronMesh(currentSides);
+  });
+
   // Sliders
   const sliderVelX = document.getElementById("velX");
   const sliderVelY = document.getElementById("velY");
@@ -200,6 +212,7 @@ function setupEventListeners() {
       controlsContent.style.display = "none";
       expandCollapseBtn.textContent = "+";
     }
+    adjustMeshPositionForMobile(); // Added to reposition after toggle
   });
 
   // Spacebar toggles play/pause
@@ -271,6 +284,48 @@ function onMouseUp(event) {
   }
 }
 
+function onTouchStart(event) {
+  if (event.touches.length === 1) {
+    isMouseDown = true;
+    isTouchDrag = false;
+    wasAnimating = isAnimating;
+    if (wasAnimating) {
+      isAnimating = false;
+    }
+    lastMouseX = event.touches[0].clientX;
+    lastMouseY = event.touches[0].clientY;
+  }
+}
+
+function onTouchMove(event) {
+  if (!isMouseDown || event.touches.length !== 1) return;
+  const deltaX = event.touches[0].clientX - lastMouseX;
+  const deltaY = event.touches[0].clientY - lastMouseY;
+  if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+    isTouchDrag = true;
+  }
+  if (polyhedronMesh) {
+    polyhedronMesh.rotation.x += deltaY * 0.005;
+    polyhedronMesh.rotateOnWorldAxis(
+      new THREE.Vector3(0, 1, 0),
+      deltaX * 0.005
+    );
+  }
+  lastMouseX = event.touches[0].clientX;
+  lastMouseY = event.touches[0].clientY;
+}
+
+function onTouchEnd(event) {
+  if (event.touches.length > 0) return;
+  isMouseDown = false;
+  // If it was a tap (no drag), toggle animation
+  if (!isTouchDrag) {
+    toggleAnimation();
+  } else if (wasAnimating) {
+    isAnimating = true;
+  }
+}
+
 function animate() {
   requestAnimationFrame(animate);
 
@@ -288,4 +343,18 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  adjustMeshPositionForMobile();
+}
+
+function adjustMeshPositionForMobile() {
+  if (window.innerWidth <= 600) {
+    const controlsContent = document.getElementById("controlsContent");
+    if (controlsContent.style.display !== "none") {
+      polyhedronMesh.position.y = 15; // Only shift if control panel is open
+    } else {
+      polyhedronMesh.position.y = 0;
+    }
+  } else {
+    polyhedronMesh.position.y = 0;
+  }
 }

@@ -63,3 +63,46 @@ body {
   padding: 6px 12px;
   cursor: pointer;
 }
+
+.select-container {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  body {
+    margin-bottom: 0;
+  }
+  #controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 0;
+    font-size: 1.2em; /* Larger text */
+    top: auto;
+  }
+  #controls input[type="range"] {
+    width: 80%; /* Easier to use sliders on mobile */
+  }
+  #controlsContent {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  #controlHeader {
+    border-radius: 0;
+  }
+  .radio-container {
+    display: none;
+  }
+  .select-container {
+    display: block;
+    margin: 10px 0;
+    min-width: stretch;
+  }
+  .select-container select {
+    width: 100%;
+    padding: 5px;
+    font-size: 1em;
+  }
+}
