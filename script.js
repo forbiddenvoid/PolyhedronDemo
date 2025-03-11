@@ -227,6 +227,11 @@ function setupEventListeners() {
 
 function toggleAnimation() {
   if (isMouseDown) return; // Don’t interrupt a manual rotate
+  console.log(
+    `Toggled from ${isAnimating ? "playing" : "paused"} to ${
+      !isAnimating ? "playing" : "paused"
+    }`
+  );
   isAnimating = !isAnimating;
   document.getElementById("playPauseBtn").textContent = isAnimating
     ? "Pause"
@@ -286,6 +291,7 @@ function onMouseUp(event) {
 
 function onTouchStart(event) {
   if (event.touches.length === 1) {
+    event.preventDefault();
     isMouseDown = true;
     isTouchDrag = false;
     wasAnimating = isAnimating;
@@ -301,7 +307,9 @@ function onTouchMove(event) {
   if (!isMouseDown || event.touches.length !== 1) return;
   const deltaX = event.touches[0].clientX - lastMouseX;
   const deltaY = event.touches[0].clientY - lastMouseY;
-  if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+
+  // Lowered threshold to reduce accidental drags
+  if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) {
     isTouchDrag = true;
   }
   if (polyhedronMesh) {
@@ -317,13 +325,16 @@ function onTouchMove(event) {
 
 function onTouchEnd(event) {
   if (event.touches.length > 0) return;
+  event.preventDefault();
   isMouseDown = false;
-  // If it was a tap (no drag), toggle animation
+
+  // Tap toggles animation, drag resumes if it was animating
   if (!isTouchDrag) {
-    toggleAnimation();
+    isAnimating = !wasAnimating;
   } else if (wasAnimating) {
     isAnimating = true;
   }
+  isTouchDrag = false;
 }
 
 function animate() {
