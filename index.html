@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>3D Spinning Polyhedron Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="controls">
+
+  <!-- Header for "Controls" -->
+  <div id="controlHeader">
+    <span class="title">Controls</span>
+    <span id="expandCollapseBtn">–</span>
+  </div>
+
+  <!-- The rest of the controls go here; toggled by the expand/collapse button -->
+  <div id="controlsContent">
+
+    <!-- Play/Pause Button -->
+    <button id="playPauseBtn">Pause</button>
+
+    <!-- Polyhedron Sides Radio Buttons -->
+    <div class="radio-container">
+      <strong>Faces:</strong><br>
+      <label><input type="radio" name="sides" value="4">4</label>
+      <label><input type="radio" name="sides" value="6" checked>6</label>
+      <label><input type="radio" name="sides" value="8">8</label>
+      <label><input type="radio" name="sides" value="10">10</label>
+      <label><input type="radio" name="sides" value="12">12</label>
+      <label><input type="radio" name="sides" value="20">20</label>
+    </div>
+
+    <!-- Sliders -->
+    <div class="slider-container">
+      <label for="velX">Vel X:</label>
+      <input type="range" id="velX" min="-100" max="100" value="20" />
+      <span id="velXVal">20</span>
+    </div>
+    <div class="slider-container">
+      <label for="velY">Vel Y:</label>
+      <input type="range" id="velY" min="-100" max="100" value="20" />
+      <span id="velYVal">20</span>
+    </div>
+    <div class="slider-container">
+      <label for="velZ">Vel Z:</label>
+      <input type="range" id="velZ" min="-100" max="100" value="20" />
+      <span id="velZVal">20</span>
+    </div>
+    <div class="slider-container">
+      <label for="size">Size:</label>
+      <input type="range" id="size" min="5" max="100" value="30" />
+      <span id="sizeVal">30</span>
+    </div>
+    <div class="slider-container">
+      <label for="red">Red:</label>
+      <input type="range" id="red" min="0" max="255" value="127" />
+      <span id="redVal">127</span>
+    </div>
+    <div class="slider-container">
+      <label for="green">Green:</label>
+      <input type="range" id="green" min="0" max="255" value="127" />
+      <span id="greenVal">127</span>
+    </div>
+    <div class="slider-container">
+      <label for="blue">Blue:</label>
+      <input type="range" id="blue" min="0" max="255" value="255" />
+      <span id="blueVal">255</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- Three.js (CDN) -->
+<script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.174.0/examples/jsm/"
+      }
+    }
+  </script>
+<script type="module" src="script.js"></script>
+</body>
+</html>
